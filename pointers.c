@@ -12,7 +12,8 @@
  * Look at the `test_add_with_pointers()` below for an example of usage.
  */
 int add_with_pointers(int *val1, int *val2) {
-    return 2;
+    int val3 = *val1 + *val2;
+    return val3;
 }
 
 void test_add_with_pointers(CuTest *tc) {
@@ -42,6 +43,13 @@ void test_add_with_pointers(CuTest *tc) {
 int arrayForFinding[] = { 7, 8, 13, 19, 3, 0 };
 
 int* address_in_array(int value_to_find) {
+    int *array = arrayForFinding;
+        while (*array != 0){
+            if (*array == value_to_find){
+                return array;
+            }
+            array++;
+        }
     return NULL;
 }
 
@@ -70,7 +78,20 @@ void test_address_in_array(CuTest *tc) {
  * Look at the `test_bytes_between_4s()` for an example of usage.
  */
 int bytes_between_4s(int* array) {
-    return 2;
+    bool gotFour = false;
+    int count = 0;
+    while (true){
+        if ((*array == 4) && (gotFour == false)){
+            gotFour = true;
+        }
+        else if ((*array == 4) && (gotFour == true)){
+            return count * sizeof(int);
+       }
+        if (*array != 4 && gotFour){
+            count++;
+        }
+        array++;
+    }
 }
 
 void test_bytes_between_4s(CuTest *tc) {
@@ -97,8 +118,15 @@ void test_bytes_between_4s(CuTest *tc) {
  */
 
 void point_to_smallest(int* first, int* second) {
+    if (*first > *second){
+        *first = *second;
+    }
+    if (*first < *second){
+        *second = *first;
+    }
     return;
 }
+
 
 void test_point_to_smallest(CuTest *tc) {
     int a, b;
@@ -133,7 +161,26 @@ void test_point_to_smallest(CuTest *tc) {
  */
 
 void point_to_smallest_ptr(int** first, int** second) {
-    return;
+    if (*first == NULL ){
+        *first = *second;
+        return;
+    }
+    if (*second == NULL){
+        *second = *first;
+        return;
+    }
+    if (**first == **second){
+        *second = *first;
+        return;
+    }
+    if (**first > **second){
+        *first = *second;
+        return;
+    }
+    if (**first < **second){
+        *second = *first;
+        return;
+    }
 }
 
 
@@ -193,9 +240,17 @@ void test_point_to_smallest_ptr(CuTest *tc) {
  * Look at the `test_power_replace()` for an example of usage.
  */
 void power_replace(int* val, int power) {
-    return;
+int result = 1;
+    if (power == 0){
+        result = 1;
+        *val = result;
+        return;
+    }
+    for (int i = 0; i < power; i++){
+        result *= *val;
+    }
+    *val = result;
 }
-
 void test_power_replace(CuTest *tc) {
     int val = 2;
 
@@ -221,7 +276,16 @@ void test_power_replace(CuTest *tc) {
  */
 
 int power_sum_dont_replace(int* a, int* b) {
-    return 2;
+    int numOne = *a;
+    int numTwo = *b;
+    int temp1 = numOne;
+    int temp2 = numTwo;
+    power_replace(&temp1, 3);
+    power_replace(&temp2, 3);
+    int val1 = temp1;
+    int val2 = temp2;
+
+    return val1 + val2;
 }
 
 void test_power_sum_dont_replace(CuTest *tc) {
@@ -261,6 +325,12 @@ void test_power_sum_dont_replace(CuTest *tc) {
 
 
 void set_string_with_q(char* s1, char* s2, char** output) {
+    if (strstr(s1,"q")){
+        *output = s1;
+    }
+    if (strstr(s2,"q")){
+        *output = s2;
+    }
     return;
 }
 
